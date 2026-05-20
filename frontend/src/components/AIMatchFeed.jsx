@@ -20,12 +20,12 @@ const [checkoutUrl, setCheckoutUrl] = useState('');
   try {
     const result = await createDeposit(job.id, userId);
     
-    // Check if the backend returned the squad checkout_url
+    // Check if the backend returned the Aria checkout_url
     if (result.checkoutUrl) {
       setCheckoutUrl(result.checkoutUrl); 
       setMessage(`✅ Payment link created! Click to complete deposit.`);
     } else {
-      setMessage('Deposit created. Checkout URL pending from Squad.');
+      setMessage('Deposit created. Checkout URL pending from ARIA.');
     }
     
     setShowSuccess(true);

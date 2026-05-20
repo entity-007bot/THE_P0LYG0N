@@ -1,6 +1,6 @@
 import { Landmark, PiggyBank, ShieldCheck, Sparkles, Mic, Wallet, TrendingUp, Award, Clock } from 'lucide-react'; 
 import { processVoiceIntent, createDeposit } from '../api'; 
-import { verifySquadTransaction } from '../api.js';
+import { verifyAriaTransaction } from '../api.js';
 
 import React, { useState } from 'react';
 
@@ -128,7 +128,7 @@ const showVoiceToast = (message, job) => {
     <div class="flex items-start gap-3">
       <div class="text-2xl">${job ? '💼' : '🤖'}</div>
       <div class="flex-1">
-        <p class="font-bold text-sm">${job ? 'Job Match Found!' : 'SquadFlow AI'}</p>
+        <p class="font-bold text-sm">${job ? 'Job Match Found!' : 'ARIA AI'}</p>
         <p class="text-sm text-white/80">${message}</p>
         ${job ? `<p class="text-xs text-green-400 mt-2">💰 ₦${job.amount} • 🎯 ${job.matchPercent}% match</p>` : ''}
       </div>
@@ -142,7 +142,7 @@ const showVoiceToast = (message, job) => {
   async function handleVerifyPayment(ref) {
     setVerifying(true);
     try {
-      const status = await verifySquadTransaction(ref);
+      const status = await verifyAriaTransaction(ref);
       alert(`Payment Status: ${status.data.transaction_status}`);
     } catch (err) {
       alert("Verification failed: " + err.message);
@@ -165,7 +165,7 @@ const showVoiceToast = (message, job) => {
           </div>
         </div>
 
-        <p className="text-sm font-semibold text-white/60">Squad wallet balance</p>
+        <p className="text-sm font-semibold text-white/60">Aria wallet balance</p>
         <p className="mb-5 text-4xl font-black">{formatNaira(wallet.balanceKobo)}</p>
 
         <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4">
@@ -355,7 +355,7 @@ const showVoiceToast = (message, job) => {
               <span className="rounded-full bg-blue-600/10 px-3 py-1 text-xs font-black text-blue-600">₦50 Premium Paid</span>
             </div>
             <p className="mt-2 text-xs text-black/60 leading-relaxed">
-              Your current job is covered for accidental injury via the SquadFlow Escrow split.
+              Your current job is covered for accidental injury via the Aria Escrow split.
             </p>
             <div className="mt-2 flex items-center gap-1 text-[10px] text-blue-600">
               <Clock size={10} />

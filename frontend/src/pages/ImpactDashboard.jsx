@@ -115,7 +115,7 @@ export default function ImpactDashboard() {
                 <span className="text-xs font-bold uppercase tracking-wider text-amber">Live Economic Intelligence</span>
               </div>
               <h1 className="text-4xl font-black tracking-tight lg:text-5xl">Nigeria Economic Activity Dashboard</h1>
-              <p className="mt-2 text-white/70 max-w-xl">Real-time insights from SquadFlow AI's intelligent economic system powering the informal economy</p>
+              <p className="mt-2 text-white/70 max-w-xl">Real-time insights from Aria AI's intelligent economic system powering the informal economy</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="rounded-2xl bg-white/10 backdrop-blur-sm px-4 py-2 text-center">
@@ -151,7 +151,7 @@ export default function ImpactDashboard() {
             icon={Activity} 
             label="Transaction Volume" 
             value={formatCompactNaira(impact.totalEarned)} 
-            detail="via Squad payment rails"
+            detail="via Aria payment rails"
             trend="+41%"
             trendPositive={true}
             delay={1}

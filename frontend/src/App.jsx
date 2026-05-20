@@ -49,7 +49,7 @@ import {
   getImpact,
   getJobs,
   getLgaHeatmap,
-  getSquadStatus,
+  getAriaStatus,
   getToolWorkspace,
   initiateDynamicVirtualAccount,
   mockPayment,
@@ -66,10 +66,13 @@ import AdminInsights from './components/AdminInsights.jsx';
 import ImpactDashboard from './pages/ImpactDashboard.jsx';
 import ControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
-
+import AdminPanel from './pages/AdminPanel.jsx';
+if (window.location.pathname === '/admin') {
+  return <AdminPanel />;
+}
 function readSavedUserId() {
   try {
-    return window.localStorage.getItem('squadflow_user_id');
+    return window.localStorage.getItem('aria_user_id');
   } catch {
     return null;
   }
@@ -96,7 +99,7 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeTool, setActiveTool] = useState('AI Search');
   const [backendOnline, setBackendOnline] = useState(false);
-  const [squadStatus, setSquadStatus] = useState(null);
+  const [ariaStatus, setAriaStatus] = useState(null);
 
   async function refresh(id = userId) {
     if (!id) return;
@@ -124,12 +127,12 @@ export default function App() {
       .catch(() => {
         if (!cancelled) setBackendOnline(false);
       });
-    getSquadStatus()
+    getAriaStatus()
       .then((status) => {
-        if (!cancelled) setSquadStatus(status);
+        if (!cancelled) setAriaStatus(status);
       })
       .catch(() => {
-        if (!cancelled) setSquadStatus(null);
+        if (!cancelled) setAriaStatus(null);
       });
     return () => {
       cancelled = true;
@@ -138,7 +141,7 @@ export default function App() {
 
   function handleOnboard(result) {
     try {
-      window.localStorage.setItem('squadflow_user_id', result.user.id);
+      window.localStorage.setItem('aria_user_id', result.user.id);
     } catch {
       // Some mobile browser modes disable storage; keep the session in memory.
     }
@@ -184,21 +187,21 @@ export default function App() {
                       <Zap size={24} />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white/70">🏆 Squad Hackathon 3.0</p>
-                      <h1 className="text-3xl font-black tracking-tight sm:text-4xl">SquadFlow AI</h1>
+                      <p className="text-sm font-bold text-white/70">🏆Squad Hackathon 3.0</p>
+                      <h1 className="text-3xl font-black tracking-tight sm:text-4xl">POLYGON</h1>
                     </div>
                   </div>
                   <p className="max-w-2xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
-                    Local AI, Squad payments, verified identity, and proof-of-work for the informal economy.
+                    Local AI, Aria payments, verified identity, and proof-of-work for the informal economy.
                   </p>
                   <p className="mt-6 max-w-xl text-base leading-7 text-white/80">
-                    A mobile-first operating system for workers: NIN/BVN checks, Squad virtual accounts, matching, payouts, savings, KiScore, and government-grade labour insights in one live flow.
+                    A mobile-first operating system for workers: NIN/BVN checks, Aria virtual accounts, matching, payouts, savings, KiScore, and government-grade labour insights in one live flow.
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <LaunchMetric icon={Bot} label="AI match loop" value="Local-first" />
-                  <LaunchMetric icon={WalletCards} label="Squad rail" value="Wallet + escrow" />
+                  <LaunchMetric icon={WalletCards} label="Aria rail" value="Wallet + escrow" />
                   <LaunchMetric icon={ShieldCheck} label="Identity" value="NIN/BVN + KiScore" />
                 </div>
               </div>
@@ -245,7 +248,7 @@ export default function App() {
             <span className={`h-2 w-2 rounded-full ${backendOnline ? 'bg-palm animate-pulse' : 'bg-clay'}`} />
             Backend {backendOnline ? 'active' : 'offline'}
           </span>
-            <span className="truncate">AI matching | Squad wallet | KYC | Live insights</span>
+            <span className="truncate">AI matching | Aria wallet | KYC | Live insights</span>
         </div>
       </header>
 
@@ -265,7 +268,7 @@ export default function App() {
             onMockPayment={handleMockPayment}
             onRefresh={refresh}
             activeTool={activeTool}
-            squadStatus={squadStatus}
+            ariaStatus={ariaStatus}
           />
         )}
       </section>
@@ -301,7 +304,7 @@ const MAIN_TABS = [
   { id: 'home', label: 'Home', kicker: 'Dashboard • Live', icon: Home },
   { id: 'chat', label: 'Chat', kicker: 'AI Assistant • 24/7', icon: MessageCircle },
   { id: 'jobs', label: 'Jobs', kicker: 'Opportunities • AI-matched', icon: BriefcaseBusiness },
-  { id: 'wallet', label: 'Wallet', kicker: 'Squad • ₦ Balance', icon: WalletCards },
+  { id: 'wallet', label: 'Wallet', kicker: 'Aria • ₦ Balance', icon: WalletCards },
   { id: 'profile', label: 'Profile', kicker: 'KiScore • Identity', icon: Settings },
   { id: 'control', label: 'Control', kicker: "Gov't & Analytics", icon: LayoutDashboard }, // Fixed with double quotes
   { id: 'ImpactDashboard', label: 'ImpactDashboard', kicker: 'impact', icon: LayoutDashboard } 
@@ -320,7 +323,7 @@ const MENU_TOOLS = [
   { name: 'More Tools', icon: Wrench, detail: 'Invites, sharing, security shortcuts, and advanced settings.', gradient: 'from-stone-500 to-neutral-500' }
 ];
 
-function TabContent({ activeTab, dashboard, userId, loading, onMockPayment, onRefresh, activeTool, squadStatus }) {
+function TabContent({ activeTab, dashboard, userId, loading, onMockPayment, onRefresh, activeTool, ariaStatus }) {
   if (activeTab === 'chat') {
     return (
       <>
@@ -356,7 +359,7 @@ function TabContent({ activeTab, dashboard, userId, loading, onMockPayment, onRe
         <ToolActivationPanel activeTool={activeTool} currentArea="Wallet" userId={userId} />
         <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
           <WalletDashboard dashboard={dashboard} onMockPayment={onMockPayment} loading={loading} />
-          <FinancialAccessPanel squadStatus={squadStatus} />
+          <FinancialAccessPanel ariaStatus={ariaStatus} />
         </div>
       </>
     );
@@ -380,7 +383,7 @@ function TabContent({ activeTab, dashboard, userId, loading, onMockPayment, onRe
       <ToolActivationPanel activeTool={activeTool} currentArea="Home" userId={userId} />
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Metric icon={CreditCard} label="Wallet rail" value="Squad" trend="Active" />
+        <Metric icon={CreditCard} label="Wallet rail" value="Aria" trend="Active" />
         <Metric icon={BarChart3} label="AI scoring" value="KiScore" trend="Real-time" />
         <Metric icon={Zap} label="Access modes" value="SMS/USSD" trend="Offline-first" />
         <Metric icon={ShieldCheck} label="Identity" value="NIN/BVN" trend="NDPR-ready" />
@@ -416,7 +419,7 @@ function HomeFeed({ dashboard, userId, onRefresh }) {
           <span className="rounded-lg bg-gradient-to-r from-mint to-palm/20 px-3 py-1.5 text-sm font-black text-palm">🟢 Live</span>
         </div>
         <div className="grid gap-3 md:grid-cols-3">
-          <Signal label="Wallet" value="Squad collections" icon={WalletCards} />
+          <Signal label="Wallet" value="Aria collections" icon={WalletCards} />
           <Signal label="Skill graph" value={dashboard.economicIdentity?.skillGraph?.slice(0, 2).join(', ') || 'Learning'} icon={TrendingUp} />
           <Signal label="KYC baseline" value={dashboard.user.identity_status || 'unverified'} icon={ShieldCheck} />
         </div>
@@ -445,7 +448,7 @@ function DemoCommandCenter({ dashboard, loading, onMockPayment, onRefresh }) {
           </div>
           <h2 className="text-3xl font-black tracking-tight">From worker onboarding to trusted earning in one flow.</h2>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70">
-            Show the judges a complete loop: worker profile, AI-ranked gigs, Squad escrow, proof-of-work verification, 5% Growth Vault, and credit identity signals.
+            Show the judges a complete loop: worker profile, AI-ranked gigs, Aria escrow, proof-of-work verification, 5% Growth Vault, and credit identity signals.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <LiveSignal icon={WalletCards} label="Wallet volume" value={formatCompactNaira(balance)} />
@@ -515,7 +518,7 @@ const TOOL_WORKSPACES = {
   'AI Search': {
     status: 'Active',
     title: 'Smart search across app content',
-    description: 'Searches workers, gigs, wallet events, match reasons, groups, and support topics inside SquadFlow.',
+    description: 'Searches workers, gigs, wallet events, match reasons, groups, and support topics inside Aria.',
     actions: ['Find best gigs', 'Search wallet history', 'Explain trust score'],
     connected: ['Chat', 'Support', 'Groups']
   },
@@ -831,7 +834,7 @@ function ChatView() {
           </div>
         </div>
         <div className="space-y-4">
-          <ChatBubble name="SquadFlow AI" text="I can search jobs, explain wallet activity, translate onboarding, or connect you to support." isBot />
+          <ChatBubble name="Aria AI" text="I can search jobs, explain wallet activity, translate onboarding, or connect you to support." isBot />
           <ChatBubble name="Tailors Group" text="New uniforms contract near Yaba. Verified workers with 80+ trust score get priority." />
           <ChatBubble name="Support" text="Escrow disputes, failed withdrawals, and verification issues can be reported here." />
         </div>
@@ -843,7 +846,7 @@ function ChatView() {
           ))}
         </div>
         <div className="mt-5 grid grid-cols-[1fr_48px] gap-2">
-          <input className="h-12 rounded-xl border border-black/15 px-4 outline-none focus:border-palm focus:ring-1 focus:ring-palm transition-all" placeholder="Ask SquadFlow AI..." />
+          <input className="h-12 rounded-xl border border-black/15 px-4 outline-none focus:border-palm focus:ring-1 focus:ring-palm transition-all" placeholder="Ask Aria AI..." />
           <button className="grid h-12 place-items-center rounded-xl bg-gradient-to-r from-palm to-mint text-white shadow-md hover:shadow-lg transition-all" title="Send message">
             <Rocket size={18} />
           </button>
@@ -979,11 +982,11 @@ function GigPostPanel({ userId, onCreated }) {
   );
 }
 
-function FinancialAccessPanel({ squadStatus }) {
+function FinancialAccessPanel({ ariaStatus }) {
   return (
     <div className="grid gap-6">
-      <SquadApiStatusPanel squadStatus={squadStatus} />
-      <SquadOperationsPanel />
+      <AriaApiStatusPanel ariaStatus={ariaStatus} />
+      <AriaOperationsPanel />
       <section className="rounded-2xl border border-black/10 bg-white shadow-sm p-5">
         <p className="text-sm font-semibold text-clay">Financial inclusion</p>
         <h2 className="mb-4 text-xl font-black tracking-tight">Alternative credit signals</h2>
@@ -991,7 +994,7 @@ function FinancialAccessPanel({ squadStatus }) {
           <Signal label="Microloan readiness" value="Eligible soon" />
           <Signal label="Insurance fit" value="Device and health" />
           <Signal label="Savings behavior" value="Auto-save active" />
-          <Signal label="Payment consistency" value="Squad webhooks" />
+          <Signal label="Payment consistency" value="Aria webhooks" />
           <Signal label="Identity baseline" value="NIN/BVN weighted" />
           <Signal label="Payout reach" value="Banks and wallets" />
         </div>
@@ -1013,15 +1016,15 @@ function FinancialAccessPanel({ squadStatus }) {
   );
 }
 
-function SquadApiStatusPanel({ squadStatus }) {
-  const mode = squadStatus?.mode || 'checking';
+function AriaApiStatusPanel({ ariaStatus }) {
+  const mode = ariaStatus?.mode || 'checking';
   const live = mode === 'sandbox-live';
 
   return (
     <section className="rounded-2xl border border-black/10 bg-white shadow-sm p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-clay">Mandatory Squad API</p>
+          <p className="text-sm font-semibold text-clay">Mandatory <ARIA></ARIA> API</p>
           <h2 className="text-xl font-black tracking-tight">Integration status</h2>
         </div>
         <span className={`rounded-full px-3 py-1.5 text-sm font-black ${live ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-700' : 'bg-amber/25 text-clay'}`}>
@@ -1030,23 +1033,23 @@ function SquadApiStatusPanel({ squadStatus }) {
       </div>
 
       <div className="grid gap-2 md:grid-cols-2">
-        <StatusRow label="Virtual accounts" active={squadStatus?.virtualAccounts?.configured} detail="/virtual-account" />
-        <StatusRow label="Dynamic VAs" active={squadStatus?.virtualAccounts?.configured} detail="/virtual-account/initiate-dynamic-virtual-account" />
-        <StatusRow label="Payment links" active={squadStatus?.payments?.configured} detail="/transaction/initiate" />
-        <StatusRow label="Webhook tracking" active={squadStatus?.webhooks?.configured} detail="/api/squad/webhook" />
-        <StatusRow label="Growth Vault split" active={squadStatus?.growthVaultSplit?.configured} detail={`${squadStatus?.growthVaultSplit?.percent || 5}% ledger`} />
-        <StatusRow label="Transfers" active={squadStatus?.transfers?.configured} detail={squadStatus?.transfers?.fallback || 'transfer path'} />
+        <StatusRow label="Virtual accounts" active={ariaStatus?.virtualAccounts?.configured} detail="/virtual-account" />
+        <StatusRow label="Dynamic VAs" active={ariaStatus?.virtualAccounts?.configured} detail="/virtual-account/initiate-dynamic-virtual-account" />
+        <StatusRow label="Payment links" active={ariaStatus?.payments?.configured} detail="/transaction/initiate" />
+        <StatusRow label="Webhook tracking" active={ariaStatus?.webhooks?.configured} detail="/api/aria/webhook" />
+        <StatusRow label="Growth Vault split" active={ariaStatus?.growthVaultSplit?.configured} detail={`${ariaStatus?.growthVaultSplit?.percent || 5}% ledger`} />
+        <StatusRow label="Transfers" active={ariaStatus?.transfers?.configured} detail={ariaStatus?.transfers?.fallback || 'transfer path'} />
         <StatusRow label="Transaction tracking" active detail="SQLite + webhooks" />
       </div>
 
       <p className="mt-4 text-sm leading-relaxed text-black/60 bg-gray-50 rounded-xl p-3">
-        💡 Real Squad calls activate when `backend/.env` contains valid sandbox keys. Without that file, the project still demos locally with virtual-account fallback, demo checkout URLs, escrow records, and Growth Vault ledger splits.
+        💡 Real ARIA calls activate when `backend/.env` contains valid sandbox keys. Without that file, the project still demos locally with virtual-account fallback, demo checkout URLs, escrow records, and Growth Vault ledger splits.
       </p>
     </section>
   );
 }
 
-function SquadOperationsPanel() {
+function AriaOperationsPanel() {
   const [bankForm, setBankForm] = useState({ accountNumber: '', bankCode: '' });
   const [dynamicRef, setDynamicRef] = useState('');
   const [transferRef, setTransferRef] = useState('');
@@ -1071,7 +1074,7 @@ function SquadOperationsPanel() {
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-clay">Frontend to backend links</p>
-          <h2 className="text-xl font-black tracking-tight">Squad operations console</h2>
+          <h2 className="text-xl font-black tracking-tight">ARIA operations console</h2>
         </div>
         <span className="rounded-full bg-gradient-to-r from-mint to-palm/20 px-3 py-1.5 text-xs font-black text-palm">API wired</span>
       </div>
@@ -1123,8 +1126,8 @@ function SquadOperationsPanel() {
                 return run('Dynamic VA initiate', () => initiateDynamicVirtualAccount({
                   amountKobo: 100000,
                   transactionRef,
-                  email: 'customer@squadflow.demo',
-                  customerName: 'SquadFlow Demo Customer',
+                  email: 'customer@aria_ai.demo',
+                  customerName: 'ARIA Demo Customer',
                   expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
                   metadata: { source: 'frontend_console' }
                 }));
@@ -1252,7 +1255,7 @@ function EcosystemIntegrationPanel() {
       <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-clay">Ecosystem integration</p>
-          <h2 className="text-xl font-black tracking-tight">Partner rails connected to SquadFlow</h2>
+          <h2 className="text-xl font-black tracking-tight">Partner rails connected to ARIA AI</h2>
         </div>
         <span className="rounded-full bg-gradient-to-r from-mint to-palm/20 px-3 py-1.5 text-sm font-black text-palm">🔗 API linked</span>
       </div>
@@ -1299,7 +1302,7 @@ function BackendApiCoveragePanel() {
       ['Control panel', getControlPanel],
       ['LGA heatmap', () => getLgaHeatmap('otuoke')],
       ['Ecosystem', getEcosystemIntegrations],
-      ['Squad status', getSquadStatus]
+      ['Aria status', getAriaStatus]
     ];
 
     Promise.all(items.map(async ([name, fn]) => {
@@ -1363,7 +1366,7 @@ const ECOSYSTEM_FALLBACK = [
   {
     sector: 'Banks',
     integrations: ['Behavioral lending', 'SME financing', 'Digital savings'],
-    enabledBy: ['KiScore', 'Growth Vault', 'Squad virtual accounts']
+    enabledBy: ['KiScore', 'Growth Vault', 'Aria virtual accounts']
   },
   {
     sector: 'Government',

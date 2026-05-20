@@ -80,8 +80,8 @@ export function getLgaHeatmap(lga = 'otuoke') {
   return request(`/v1/intelligence/heatmap?${params.toString()}`);
 }
 
-export function getSquadStatus() {
-  return request('/squad/status');
+export function getAriaStatus() {
+  return request('/Aria/status');
 }
 
 export function getEcosystemIntegrations() {
@@ -125,46 +125,46 @@ export function processVoiceText(transcript, userId) {
 }
 
 export function verifyBankDetails({ accountNumber, bankCode }) {
-  return request('/squad/verify-account', {
+  return request('/aria/verify-account', {
     method: 'POST',
     body: JSON.stringify({ accountNumber, bankCode })
   });
 }
 
-export function verifySquadTransaction(transactionRef) {
-  return request(`/squad/verify-transaction/${transactionRef}`);
+export function verifyAriaTransaction(transactionRef) {
+  return request(`/aria/verify-transaction/${transactionRef}`);
 }
 
 export function reQueryTransfer(reference) {
-  return request('/squad/re-query-transfer', {
+  return request('/aria/re-query-transfer', {
     method: 'POST',
     body: JSON.stringify({ reference })
   });
 }
 
 export function createDynamicVirtualAccountPool(payload) {
-  return request('/squad/dynamic-virtual-accounts/pool', {
+  return request('/aria/dynamic-virtual-accounts/pool', {
     method: 'POST',
     body: JSON.stringify(payload)
   });
 }
 
 export function initiateDynamicVirtualAccount(payload) {
-  return request('/squad/dynamic-virtual-accounts/initiate', {
+  return request('/aria/dynamic-virtual-accounts/initiate', {
     method: 'POST',
     body: JSON.stringify(payload)
   });
 }
 
 export function updateDynamicVirtualAccount(payload) {
-  return request('/squad/dynamic-virtual-accounts', {
+  return request('/aria/dynamic-virtual-accounts', {
     method: 'PATCH',
     body: JSON.stringify(payload)
   });
 }
 
 export function getDynamicVirtualAccountStatus(transactionRef) {
-  return request(`/squad/dynamic-virtual-accounts/${transactionRef}`);
+  return request(`/aria/dynamic-virtual-accounts/${transactionRef}`);
 }
 
 export function createSavingsGroup(payload) {

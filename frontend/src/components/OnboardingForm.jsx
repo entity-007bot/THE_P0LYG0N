@@ -47,7 +47,7 @@ export default function OnboardingForm({ onComplete }) {
   function loadDemoProfile() {
     setForm({
       fullName: 'Amina Okonkwo',
-      email: `amina.${Date.now()}@squadflow.demo`,
+      email: `amina.${Date.now()}@aria.demo`,
       phone: '08034567890',
       skills: 'solar inverter wiring, battery testing, shop repairs',
       city: 'Kano',
@@ -73,7 +73,7 @@ export default function OnboardingForm({ onComplete }) {
           </div>
           <div>
             <h2 className="text-xl font-black text-white tracking-tight">Worker onboarding</h2>
-            <p className="text-sm text-white/80">Verify identity, create a profile, and request a Squad virtual NUBAN</p>
+            <p className="text-sm text-white/80">Verify identity, create a profile, and request a Aria virtual NUBAN</p>
           </div>
         </div>
       </div>
@@ -283,7 +283,7 @@ export default function OnboardingForm({ onComplete }) {
           disabled={loading}
         >
           {loading && <Loader2 className="animate-spin" size={18} />}
-          {loading ? 'Creating your Squad wallet...' : '🚀 Launch SquadFlow Wallet'}
+          {loading ? 'Creating your Aria wallet...' : '🚀 Launch Aria Wallet'}
         </button>
       </div>
     </form>
