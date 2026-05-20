@@ -87,7 +87,7 @@ const PATH_ROUTES = {
 };
 
 export default function App() {
-  // ── Pathname-based routing ────────────────────────────────────────────────
+  // ── Pathname-based routing ────────────────────────────────────��───────────
   // MUST be the very first thing inside the function body, before any hooks.
   // A return that fires before hooks are called is perfectly valid in React.
   // NEVER put this block at the module/file top level — that causes the
@@ -182,7 +182,7 @@ export default function App() {
           <div className="overflow-hidden rounded-2xl border border-black/10 bg-ink text-white shadow-2xl">
             <div className="relative min-h-[560px] p-6 sm:p-8">
               <div className="absolute inset-0 opacity-40">
-                <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,#2fb083_0,transparent_30%),radial-gradient(circle_at_80%_0%,#f2b84b_0,transparent_25%),linear-gradient(135deg,#161712_0%,#135b4c_52%,#b85c38_100%)]" />
+                <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,#2fb083_0,transparent_30%),radial-gradient(circle_at_80%_0%,#f2b84b_0,transparent_25%),linear-gradient(135deg,#16171a_0%,#1a1b1e_100%)]" />
               </div>
               <div className="relative z-[1] flex min-h-[500px] flex-col justify-between gap-8">
                 <div>
@@ -465,7 +465,7 @@ function DemoCommandCenter({ dashboard, loading, onMockPayment, onRefresh }) {
           <p className="text-sm font-bold text-white/70">⚡ Quick actions</p>
           <div className="mt-4 space-y-3">
             <button
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-palm to-mint px-4 font-bold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-60"
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-palm to-mint px-4 font-bold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
               onClick={onMockPayment}
               disabled={loading}
             >
@@ -657,7 +657,7 @@ function ToolActivationPanel({ activeTool, currentArea, userId }) {
           onChange={(event) => setQuery(event.target.value)}
           placeholder={`Search ${activeTool}...`}
         />
-        <button className="grid h-12 place-items-center rounded-xl bg-gradient-to-r from-palm to-mint text-white shadow-md hover:shadow-lg transition-all" onClick={() => setQuery(query.trim())} title="Run tool search">
+        <button className="grid h-12 place-items-center rounded-xl bg-gradient-to-r from-palm to-mint text-white shadow-md hover:shadow-lg transition-all" onClick={() => setQuery(query.trim())} title="Search">
           <Search size={18} />
         </button>
       </div>
@@ -970,7 +970,7 @@ function GigPostPanel({ userId, onCreated }) {
           placeholder="Required skill"
         />
         <button
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-palm to-mint px-4 text-sm font-black text-white shadow-md transition hover:shadow-lg disabled:opacity-60"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-palm to-mint px-4 text-sm font-black text-white shadow-md transition hover:shadow-lg disabled:opacity-50"
           disabled={busy}
         >
           <BriefcaseBusiness size={16} />
@@ -1047,7 +1047,7 @@ function AriaApiStatusPanel({ ariaStatus }) {
       </div>
 
       <p className="mt-4 text-sm leading-relaxed text-black/60 bg-gray-50 rounded-xl p-3">
-        💡 Real ARIA calls activate when `backend/.env` contains valid sandbox keys. Without that file, the project still demos locally with virtual-account fallback, demo checkout URLs, escrow records, and Growth Vault ledger splits.
+        💡 Real ARIA calls activate when `backend/.env` contains valid sandbox keys. Without that file, the project still demos locally with virtual-account fallback, demo checkout URLs, escrow reconciliation, and profile ledgers.
       </p>
     </section>
   );
