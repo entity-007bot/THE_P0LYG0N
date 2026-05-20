@@ -68,13 +68,6 @@ import ControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
 import AdminPanel from './pages/AdminPanel.jsx';
 
-// Route table — add new pages here without touching App()
-const PATH_ROUTES = {
-  '/admin':         AdminPanel,
-  '/impact':        ImpactDashboard,
-  '/control-panel': ControlPanel,
-};
-
 // Helper function (module-level is fine — no JSX, no return)
 function readSavedUserId() {
   try {
@@ -84,9 +77,16 @@ function readSavedUserId() {
   }
 }
 
-export default function App() {
-  // ── Pathname-based routing ──────────────────────────────────────────────────
-  // MUST be the very first thing inside the function body, before any hooks.
+// Main App component with routing
+function AppContent() {
+  // Route table — add new pages here without touching App()
+  const PATH_ROUTES = {
+    '/admin':         AdminPanel,
+    '/impact':        ImpactDashboard,
+    '/control-panel': ControlPanel,
+  };
+
+  // Pathname-based routing — MUST be the very first thing inside the function body
   const RouteComponent = PATH_ROUTES[window.location.pathname];
   if (RouteComponent) return <RouteComponent />;
 
@@ -295,6 +295,11 @@ export default function App() {
       )}
     </main>
   );
+}
+
+// Export wrapper component
+export default function App() {
+  return <AppContent />;
 }
 
 const MAIN_TABS = [
