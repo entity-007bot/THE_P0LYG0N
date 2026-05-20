@@ -67,9 +67,8 @@ import ImpactDashboard from './pages/ImpactDashboard.jsx';
 import ControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
 import AdminPanel from './pages/AdminPanel.jsx';
-if (window.location.pathname === '/admin') {
-  return <AdminPanel />;
-}
+
+// ─── Helpers (module-level is fine — no JSX, no return) ──────────────────────
 function readSavedUserId() {
   try {
     return window.localStorage.getItem('aria_user_id');
@@ -78,18 +77,23 @@ function readSavedUserId() {
   }
 }
 
-export default function App() {
-  /*
-  if (window.location.pathname === '/impact') {
-    return <ImpactDashboard />;
-  }
-  */
+// ─── Route table — add new pages here without touching App() ─────────────────
+// Keys are exact window.location.pathname strings.
+// Values are the React components to render for that path.
+const PATH_ROUTES = {
+  '/admin':         AdminPanel,
+  '/impact':        ImpactDashboard,
+  '/control-panel': ControlPanel,
+};
 
- /*
- if (window.location.pathname === '/admin' || window.location.pathname === '/control-panel') {
-    return <ControlPanel />;
-  }
-  */
+export default function App() {
+  // ── Pathname-based routing ────────────────────────────────────────────────
+  // MUST be the very first thing inside the function body, before any hooks.
+  // A return that fires before hooks are called is perfectly valid in React.
+  // NEVER put this block at the module/file top level — that causes the
+  // "Top-level return cannot be used inside an ECMAScript module" build error.
+  const RouteComponent = PATH_ROUTES[window.location.pathname];
+  if (RouteComponent) return <RouteComponent />;
 
   const [userId, setUserId] = useState(readSavedUserId);
   const [dashboard, setDashboard] = useState(null);
@@ -307,7 +311,7 @@ const MAIN_TABS = [
   { id: 'wallet', label: 'Wallet', kicker: 'Aria • ₦ Balance', icon: WalletCards },
   { id: 'profile', label: 'Profile', kicker: 'KiScore • Identity', icon: Settings },
   { id: 'control', label: 'Control', kicker: "Gov't & Analytics", icon: LayoutDashboard }, // Fixed with double quotes
-  { id: 'ImpactDashboard', label: 'ImpactDashboard', kicker: 'impact', icon: LayoutDashboard } 
+  { id: 'impact', label: 'Impact', kicker: 'Community Impact', icon: BarChart3 }
 ];
 
 const MENU_TOOLS = [
@@ -337,7 +341,7 @@ function TabContent({ activeTab, dashboard, userId, loading, onMockPayment, onRe
     return <ControlPanel />;
   }
   
-    if (activeTab === 'ImpactDashboard') {
+  if (activeTab === 'impact') {
     return <ImpactDashboard />;
   }
 
@@ -1024,7 +1028,7 @@ function AriaApiStatusPanel({ ariaStatus }) {
     <section className="rounded-2xl border border-black/10 bg-white shadow-sm p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-clay">Mandatory <ARIA></ARIA> API</p>
+          <p className="text-sm font-semibold text-clay">Mandatory ARIA API</p>
           <h2 className="text-xl font-black tracking-tight">Integration status</h2>
         </div>
         <span className={`rounded-full px-3 py-1.5 text-sm font-black ${live ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-700' : 'bg-amber/25 text-clay'}`}>
@@ -1299,7 +1303,6 @@ function BackendApiCoveragePanel() {
       ['Jobs', getJobs],
       ['Admin insights', getAdminInsights],
       ['Impact stats', getImpact],
-      ['Control panel', getControlPanel],
       ['LGA heatmap', () => getLgaHeatmap('otuoke')],
       ['Ecosystem', getEcosystemIntegrations],
       ['Aria status', getAriaStatus]
