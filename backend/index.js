@@ -11,8 +11,32 @@ import { getEconomicIdentity, handlePaymentSuccess, updateTrustScoreForUser } fr
 
 seedJobs();
 
-const app = express();
-// Graceful shutdown — kill the old instance quickly so the new deploy can bind
+
+const port = process.env.PORT || 3000;
+
+function startServer(port) {
+  const server = app.listen(port, '0.0.0.0', () => {
+    console.log(`Backend running on port ${port}`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`Port ${port} is busy — retrying in 3 seconds...`);
+      setTimeout(() => {
+        server.close();                // clean up the failed listener
+        startServer(port);             // try again
+      }, 3000);
+    } else {
+      throw err;
+    }
+  });
+
+  return server;
+}
+
+const server = startServer(port);
+
+// Graceful shutdown (keep this part)
 process.on('SIGTERM', () => {
   console.log('SIGTERM received – closing server');
   server.close(() => {
@@ -20,10 +44,7 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
-const port = Number(process.env.PORT || 3000);
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Backend running on port ${PORT}`);
-});
+
 
 app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
 app.use(morgan('tiny'));
