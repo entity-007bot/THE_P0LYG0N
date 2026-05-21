@@ -12,7 +12,6 @@ import { getEconomicIdentity, handlePaymentSuccess, updateTrustScoreForUser } fr
 seedJobs();
 
 
-const port = process.env.PORT || 3000;
 
 // 1. Create the Express app FIRST
 const app = express();
