@@ -30,7 +30,7 @@ app.get('/api/health', (_req, res) => {
 
 app.get('/api-docs', (_req, res) => {
   res.type('html').send(`
-    <h1>SquadFlow AI API</h1>
+    <h1>Aria AI API</h1>
     <ul>
       <li>POST /api/onboard</li>
       <li>GET /api/identity/:id</li>
@@ -56,5 +56,5 @@ app.use((error, _req, res, _next) => {
 });
 
 app.listen(port, () => {
-  console.log(`SquadFlow backend listening on http://localhost:${port}`);
+  console.log(`P0LYG0N backend listening on http://localhost:${port}`);
 });
