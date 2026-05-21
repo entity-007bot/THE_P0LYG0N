@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiRouter);
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, service: 'SquadFlow AI backend' });
+  res.json({ ok: true, service: 'Aria AI backend' });
 });
 
 app.get('/api-docs', (_req, res) => {
