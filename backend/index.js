@@ -12,6 +12,14 @@ import { getEconomicIdentity, handlePaymentSuccess, updateTrustScoreForUser } fr
 seedJobs();
 
 const app = express();
+// Graceful shutdown — kill the old instance quickly so the new deploy can bind
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received – closing server');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+});
 const port = Number(process.env.PORT || 3000);
 app.listen(port, '0.0.0.0', () => {
   console.log(`Backend running on port ${PORT}`);
