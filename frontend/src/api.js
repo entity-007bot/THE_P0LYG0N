@@ -15,9 +15,8 @@ async function request(path, options = {}) {
   }
   return data;
 }
-
 export function onboardWorker(payload) {
-  return request('/onboard', {
+  return request('/api/onboard', { 
     method: 'POST',
     body: JSON.stringify(payload)
   });
