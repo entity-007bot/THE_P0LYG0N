@@ -68,6 +68,10 @@ import getControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
 import AdminPanel from './pages/AdminPanel.jsx';
 
+<<<<<<< HEAD
+=======
+// Helper function (module-level is fine — no JSX, no return)
+>>>>>>> 565d7f5200e05d1f1da83fdafd8c2f277b0e6198
 function readSavedUserId() {
   try {
     return window.localStorage.getItem('aria_user_id');
@@ -76,6 +80,7 @@ function readSavedUserId() {
   }
 }
 
+<<<<<<< HEAD
 export default function App() {
   if (window.location.pathname === '/admin') {
   return <AdminPanel />;
@@ -85,12 +90,20 @@ export default function App() {
     return <ImpactDashboard />;
   }
   */
+=======
+// Main App component with routing
+function AppContent() {
+  // Route table — add new pages here without touching App()
+  const PATH_ROUTES = {
+    '/admin':         AdminPanel,
+    '/impact':        ImpactDashboard,
+    '/control-panel': ControlPanel,
+  };
+>>>>>>> 565d7f5200e05d1f1da83fdafd8c2f277b0e6198
 
- /*
- if (window.location.pathname === '/admin' || window.location.pathname === '/control-panel') {
-    return <ControlPanel />;
-  }
-  */
+  // Pathname-based routing — MUST be the very first thing inside the function body
+  const RouteComponent = PATH_ROUTES[window.location.pathname];
+  if (RouteComponent) return <RouteComponent />;
 
   const [userId, setUserId] = useState(readSavedUserId);
   const [dashboard, setDashboard] = useState(null);
@@ -179,7 +192,7 @@ export default function App() {
           <div className="overflow-hidden rounded-2xl border border-black/10 bg-ink text-white shadow-2xl">
             <div className="relative min-h-[560px] p-6 sm:p-8">
               <div className="absolute inset-0 opacity-40">
-                <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,#2fb083_0,transparent_30%),radial-gradient(circle_at_80%_0%,#f2b84b_0,transparent_25%),linear-gradient(135deg,#161712_0%,#135b4c_52%,#b85c38_100%)]" />
+                <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,#2fb083_0,transparent_30%),radial-gradient(circle_at_80%_0%,#f2b84b_0,transparent_25%),linear-gradient(135deg,#1a1a1a_0,#333_100%)]"></div>
               </div>
               <div className="relative z-[1] flex min-h-[500px] flex-col justify-between gap-8">
                 <div>
@@ -188,7 +201,7 @@ export default function App() {
                       <Zap size={24} />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white/70">🏆Squad Hackathon 3.0</p>
+                      <p className="text-sm font-bold text-white/70">🏆 Squad Hackathon 3.0</p>
                       <h1 className="text-3xl font-black tracking-tight sm:text-4xl">POLYGON</h1>
                     </div>
                   </div>
@@ -290,9 +303,7 @@ export default function App() {
         <VoiceAssistant 
           userId={userId} 
           onJobAccepted={(job) => {
-            // Refresh dashboard to reflect escrow/status changes
             refresh();
-            // Automatically switch to jobs tab to show the accepted gig
             setActiveTab('jobs');
           }}
         />
@@ -301,14 +312,19 @@ export default function App() {
   );
 }
 
+// Export wrapper component
+export default function App() {
+  return <AppContent />;
+}
+
 const MAIN_TABS = [
   { id: 'home', label: 'Home', kicker: 'Dashboard • Live', icon: Home },
   { id: 'chat', label: 'Chat', kicker: 'AI Assistant • 24/7', icon: MessageCircle },
   { id: 'jobs', label: 'Jobs', kicker: 'Opportunities • AI-matched', icon: BriefcaseBusiness },
   { id: 'wallet', label: 'Wallet', kicker: 'Aria • ₦ Balance', icon: WalletCards },
   { id: 'profile', label: 'Profile', kicker: 'KiScore • Identity', icon: Settings },
-  { id: 'control', label: 'Control', kicker: "Gov't & Analytics", icon: LayoutDashboard }, // Fixed with double quotes
-  { id: 'ImpactDashboard', label: 'ImpactDashboard', kicker: 'impact', icon: LayoutDashboard } 
+  { id: 'control', label: 'Control', kicker: "Gov't & Analytics", icon: LayoutDashboard },
+  { id: 'impact', label: 'Impact', kicker: 'Community Impact', icon: BarChart3 }
 ];
 
 const MENU_TOOLS = [
@@ -338,7 +354,7 @@ function TabContent({ activeTab, dashboard, userId, loading, onMockPayment, onRe
     return <ControlPanel />;
   }
   
-    if (activeTab === 'ImpactDashboard') {
+  if (activeTab === 'impact') {
     return <ImpactDashboard />;
   }
 
@@ -654,7 +670,7 @@ function ToolActivationPanel({ activeTool, currentArea, userId }) {
           onChange={(event) => setQuery(event.target.value)}
           placeholder={`Search ${activeTool}...`}
         />
-        <button className="grid h-12 place-items-center rounded-xl bg-gradient-to-r from-palm to-mint text-white shadow-md hover:shadow-lg transition-all" onClick={() => setQuery(query.trim())} title="Run tool search">
+        <button className="grid h-12 place-items-center rounded-xl bg-gradient-to-r from-palm to-mint text-white shadow-md hover:shadow-lg transition-all" onClick={() => setQuery(query.trim())} title="Search">
           <Search size={18} />
         </button>
       </div>
@@ -1025,7 +1041,7 @@ function AriaApiStatusPanel({ ariaStatus }) {
     <section className="rounded-2xl border border-black/10 bg-white shadow-sm p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-clay">Mandatory <ARIA></ARIA> API</p>
+          <p className="text-sm font-semibold text-clay">Mandatory ARIA API</p>
           <h2 className="text-xl font-black tracking-tight">Integration status</h2>
         </div>
         <span className={`rounded-full px-3 py-1.5 text-sm font-black ${live ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-700' : 'bg-amber/25 text-clay'}`}>
@@ -1044,7 +1060,7 @@ function AriaApiStatusPanel({ ariaStatus }) {
       </div>
 
       <p className="mt-4 text-sm leading-relaxed text-black/60 bg-gray-50 rounded-xl p-3">
-        💡 Real ARIA calls activate when `backend/.env` contains valid sandbox keys. Without that file, the project still demos locally with virtual-account fallback, demo checkout URLs, escrow records, and Growth Vault ledger splits.
+        💡 Real ARIA calls activate when `backend/.env` contains valid sandbox keys. Without that file, the project still demos locally with virtual-account fallback, demo checkout URLs, and escrow splits.
       </p>
     </section>
   );
@@ -1300,7 +1316,6 @@ function BackendApiCoveragePanel() {
       ['Jobs', getJobs],
       ['Admin insights', getAdminInsights],
       ['Impact stats', getImpact],
-      ['Control panel', getControlPanel],
       ['LGA heatmap', () => getLgaHeatmap('otuoke')],
       ['Ecosystem', getEcosystemIntegrations],
       ['Aria status', getAriaStatus]
