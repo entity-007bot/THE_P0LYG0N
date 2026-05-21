@@ -68,6 +68,8 @@ import ControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
 import AdminPanel from './pages/AdminPanel.jsx';
 
+console.log('API Base:', import.meta.env.VITE_API_BASE);
+
 function readSavedUserId() {
   try {
     return window.localStorage.getItem('aria_user_id');
