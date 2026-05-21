@@ -14,6 +14,24 @@ seedJobs();
 
 const port = process.env.PORT || 3000;
 
+// 1. Create the Express app FIRST
+const app = express();
+
+// 2. Configure middleware and routes
+app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
+app.use(morgan('tiny'));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api', apiRouter);
+
+app.get('/api/health', (_req, res) => {
+  res.json({ ok: true, service: 'POLYGON backend (ARIA AI)' });
+});
+
+// 3. Now start the server
+const port = process.env.PORT || 3000;
+
 function startServer(port) {
   const server = app.listen(port, '0.0.0.0', () => {
     console.log(`Backend running on port ${port}`);
@@ -23,8 +41,8 @@ function startServer(port) {
     if (err.code === 'EADDRINUSE') {
       console.log(`Port ${port} is busy — retrying in 3 seconds...`);
       setTimeout(() => {
-        server.close();                // clean up the failed listener
-        startServer(port);             // try again
+        server.close();
+        startServer(port);
       }, 3000);
     } else {
       throw err;
@@ -36,7 +54,6 @@ function startServer(port) {
 
 const server = startServer(port);
 
-// Graceful shutdown (keep this part)
 process.on('SIGTERM', () => {
   console.log('SIGTERM received – closing server');
   server.close(() => {
@@ -44,19 +61,6 @@ process.on('SIGTERM', () => {
     process.exit(0);
   });
 });
-
-
-app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
-app.use(morgan('tiny'));
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-app.use('/api', apiRouter);
-
-app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, service: 'Aria AI backend' });
-});
-
 app.get('/api-docs', (_req, res) => {
   res.type('html').send(`
     <h1>SquadFlow AI API</h1>
