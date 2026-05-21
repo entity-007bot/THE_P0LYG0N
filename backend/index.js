@@ -11,12 +11,12 @@ import { getEconomicIdentity, handlePaymentSuccess, updateTrustScoreForUser } fr
 
 seedJobs();
 
-const app = express();
-const port = Number(process.env.PORT || 3000);
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Backend running on port ${PORT}`);
-});
 
+
+// 1. Create the Express app FIRST
+const app = express();
+
+// 2. Configure middleware and routes
 app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
 app.use(morgan('tiny'));
 app.use(express.json({ limit: '1mb' }));
@@ -25,9 +25,41 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiRouter);
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, service: 'Aria AI backend' });
+  res.json({ ok: true, service: 'POLYGON backend (ARIA AI)' });
 });
 
+// 3. Now start the server
+const port = process.env.PORT || 3000;
+
+function startServer(port) {
+  const server = app.listen(port, '0.0.0.0', () => {
+    console.log(`Backend running on port ${port}`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`Port ${port} is busy — retrying in 3 seconds...`);
+      setTimeout(() => {
+        server.close();
+        startServer(port);
+      }, 3000);
+    } else {
+      throw err;
+    }
+  });
+
+  return server;
+}
+
+const server = startServer(port);
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received – closing server');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+});
 app.get('/api-docs', (_req, res) => {
   res.type('html').send(`
     <h1>Aria AI API</h1>
