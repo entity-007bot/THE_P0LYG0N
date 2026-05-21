@@ -64,14 +64,10 @@ import AIMatchFeed from './components/AIMatchFeed.jsx';
 import ProofOfWorkPanel from './components/ProofOfWorkPanel.jsx';
 import AdminInsights from './components/AdminInsights.jsx';
 import ImpactDashboard from './pages/ImpactDashboard.jsx';
-import getControlPanel from './pages/ControlPanel.jsx';
+import ControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
 import AdminPanel from './pages/AdminPanel.jsx';
 
-<<<<<<< HEAD
-=======
-// Helper function (module-level is fine — no JSX, no return)
->>>>>>> 565d7f5200e05d1f1da83fdafd8c2f277b0e6198
 function readSavedUserId() {
   try {
     return window.localStorage.getItem('aria_user_id');
@@ -80,33 +76,14 @@ function readSavedUserId() {
   }
 }
 
-<<<<<<< HEAD
 export default function App() {
   if (window.location.pathname === '/admin') {
-  return <AdminPanel />;
-}
-  /*
-  if (window.location.pathname === '/impact') {
-    return <ImpactDashboard />;
+    return <AdminPanel />;
   }
-  */
-=======
-// Main App component with routing
-function AppContent() {
-  // Route table — add new pages here without touching App()
-  const PATH_ROUTES = {
-    '/admin':         AdminPanel,
-    '/impact':        ImpactDashboard,
-    '/control-panel': ControlPanel,
-  };
->>>>>>> 565d7f5200e05d1f1da83fdafd8c2f277b0e6198
-
-  // Pathname-based routing — MUST be the very first thing inside the function body
-  const RouteComponent = PATH_ROUTES[window.location.pathname];
-  if (RouteComponent) return <RouteComponent />;
 
   const [userId, setUserId] = useState(readSavedUserId);
   const [dashboard, setDashboard] = useState(null);
+  // ... rest of your existing state and logic remains unchanged
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
@@ -312,10 +289,6 @@ function AppContent() {
   );
 }
 
-// Export wrapper component
-export default function App() {
-  return <AppContent />;
-}
 
 const MAIN_TABS = [
   { id: 'home', label: 'Home', kicker: 'Dashboard • Live', icon: Home },
