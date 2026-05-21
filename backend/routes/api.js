@@ -857,7 +857,7 @@ router.get('/admin/control-panel', (_req, res) => {
   });
 });
 
-router.get('/squad/status', (_req, res) => {
+router.get('/Aria/status', (_req, res) => {
   res.json(getSquadIntegrationStatus());
 });
 

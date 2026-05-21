@@ -64,12 +64,10 @@ import AIMatchFeed from './components/AIMatchFeed.jsx';
 import ProofOfWorkPanel from './components/ProofOfWorkPanel.jsx';
 import AdminInsights from './components/AdminInsights.jsx';
 import ImpactDashboard from './pages/ImpactDashboard.jsx';
-import ControlPanel from './pages/ControlPanel.jsx';
+import getControlPanel from './pages/ControlPanel.jsx';
 import VoiceAssistant from './components/VoiceAssistant';
 import AdminPanel from './pages/AdminPanel.jsx';
-if (window.location.pathname === '/admin') {
-  return <AdminPanel />;
-}
+
 function readSavedUserId() {
   try {
     return window.localStorage.getItem('aria_user_id');
@@ -79,6 +77,9 @@ function readSavedUserId() {
 }
 
 export default function App() {
+  if (window.location.pathname === '/admin') {
+  return <AdminPanel />;
+}
   /*
   if (window.location.pathname === '/impact') {
     return <ImpactDashboard />;
