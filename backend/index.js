@@ -28,38 +28,38 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'POLYGON backend (ARIA AI)' });
 });
 
-// 3. Now start the server
 const port = process.env.PORT || 3000;
 
-function startServer(port) {
-  const server = app.listen(port, '0.0.0.0', () => {
-    console.log(`Backend running on port ${port}`);
-  });
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`Backend running on port ${port}`);
+});
 
-  server.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-      console.log(`Port ${port} is busy — retrying in 3 seconds...`);
-      setTimeout(() => {
-        server.close();
-        startServer(port);
-      }, 3000);
-    } else {
-      throw err;
-    }
-  });
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is in use – exiting so Render can retry`);
+    process.exit(1);
+  }
+  throw err;
+});
 
-  return server;
-}
-
-const server = startServer(port);
-
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received – closing server');
+// Graceful shutdown – ensure the port is freed quickly
+function shutdown() {
+  console.log('Shutting down gracefully...');
   server.close(() => {
     console.log('Server closed');
     process.exit(0);
   });
-});
+  // Force exit after 5 seconds if server.close() hangs
+  setTimeout(() => {
+    console.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, 5000);
+}
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
+
 app.get('/api-docs', (_req, res) => {
   res.type('html').send(`
     <h1>Aria AI API</h1>
