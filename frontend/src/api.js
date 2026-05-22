@@ -1,7 +1,8 @@
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api';
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const apiPath = path.startsWith('/api') ? path : `/api${path}`;
+  const response = await fetch(`${API_BASE}${apiPath}`, {
     headers: {
       'Content-Type': 'application/json',
       ...options.headers
@@ -27,7 +28,7 @@ export function getDashboard(userId) {
 }
 
 export function getHealth() {
-  return request('/health');
+  return request('/api/health');
 }
 
 export function getJobs() {
